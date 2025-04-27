@@ -16,26 +16,33 @@ function updateCart() {
 
   cart.forEach(item => {
     subtotal += item.price * item.quantity;
-  
+
     const div = document.createElement('div');
-    div.className = 'd-flex justify-content-between align-items-center mb-3';
-  
+    div.className = 'd-flex justify-content-between align-items-start mb-4';
+
     div.innerHTML = `
-      <div class="d-flex align-items-center">
-        <img src="${item.image || 'fallback-image.jpg'}" class="cart-item-img" alt="${item.title}">
-        <div>
-          <strong>${item.title}</strong><br>
-          <small>$${item.price.toFixed(2)} c/u</small>
+      <div>
+        <div class="d-flex align-items-center mb-2">
+          <img src="${item.image || 'fallback-image.jpg'}" class="cart-item-img me-2" alt="${item.title}">
+          <div>
+            <strong>${item.title}</strong><br>
+            <small>$${item.price.toFixed(2)} c/u</small>
+          </div>
+        </div>
+        
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <div class="d-flex align-items-center mb-2">
+          <button class="btn btn-sm btn-outline-primary me-2" onclick="decreaseQuantity(${item.id})" aria-label="Reducir cantidad de ${item.title}">–</button>
+          <span>${item.quantity}</span>
+          <button class="btn btn-sm btn-outline-primary mx-2" onclick="increaseQuantity(${item.id})" aria-label="Aumentar cantidad de ${item.title}">+</button>
+        </div>
+        <div class="text-end">
+          <button class="btn btn-sm btn-danger mt-2" onclick="removeFromCart(${item.id})" aria-label="Quitar ${item.title} del carrito">Quitar</button>
         </div>
       </div>
-      <div class="d-flex align-items-center">
-        <button class="btn btn-sm btn-outline-secondary me-2" onclick="decreaseQuantity(${item.id})" aria-label="Reducir cantidad de ${item.title}">–</button>
-        <span>${item.quantity}</span>
-        <button class="btn btn-sm btn-outline-secondary mx-2" onclick="increaseQuantity(${item.id})" aria-label="Aumentar cantidad de ${item.title}">+</button>
-        <button class="btn btn-sm btn-danger ms-2" onclick="removeFromCart(${item.id})" aria-label="Quitar ${item.title} del carrito">Quitar</button>
-      </div>
     `;
-  
+
     cartItems.appendChild(div);
   });
 
@@ -44,7 +51,6 @@ function updateCart() {
   const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartCount.textContent = totalQuantity;
 
-  // Mostrar u ocultar badge
   cartCount.classList.toggle('d-none', totalQuantity === 0);
 }
 
@@ -203,7 +209,7 @@ window.addEventListener('scroll', () => {
     header.classList.remove('header-hidden');
   }
 
-  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // Evitar valores negativos
+  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
 });
 
 document.getElementById('clear-cart-button').addEventListener('click', clearCart);

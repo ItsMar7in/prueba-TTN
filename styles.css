@@ -1,14 +1,15 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
   
   :root {
-    --primary: #973797; /* Morado para botones */
-    --secondary: #27ae60; /* Verde para acciones de compra */
-    --accent: #f8f9fa; /* Fondo claro */
-    --text: #333;
+    --primary: #B82132; /* Rojo principal */
+    --secondary: #D2665A; /* Coral */
+    --accent: #7D0A0A; /* Beige suave */
+    --background: #ffff; /* Fondo general */
+    --text: #333; /* Texto oscuro */
   }
   
   body {
@@ -18,7 +19,7 @@
     min-height: 100vh;
     padding-top: 80px;
     color: var(--text);
-    
+    background-color: var(--background);
   }
   
   h1, h2, h5 {
@@ -28,7 +29,7 @@
   }
   
   header, footer {
-    background-color: #34495e;
+    background-color: var(--accent);
     color: #fff;
     padding: 15px;
     text-align: center;
@@ -146,7 +147,7 @@
     right: -100%;
     width: min(90vw, 400px);
     height: 100%;
-    background-color: var(--accent);
+    background-color: var(--background);
     border-left: 1px solid #dee2e6;
     box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
     padding: 15px;
@@ -188,7 +189,7 @@
   .cart-footer {
     position: sticky;
     bottom: 0;
-    background: var(--accent);
+    background: var(--background);
     padding: 10px 0;
     border-top: 1px solid #dee2e6;
   }
@@ -220,26 +221,36 @@
   }
   
   .btn-primary:hover {
-    background-color: #34495e;
+    background-color: #991926; /* más oscuro que #B82132 */
   }
   
   .btn-primary:active {
     transform: scale(1.05);
     transition: transform 0.1s ease;
   }
+  .btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: var(--primary);
+    color: white;
+  }
+  
   
   .btn-success {
-    background-color: var(--secondary);
-    border-color: var(--secondary);
+    background-color: var(--primary);
+    border-color: var(--primary);
   }
   
   .btn-success:hover {
-    background-color: #219653;
+    background-color: var(--accent); /* más oscuro que #D2665A */
   }
   
   .btn-danger {
-    background-color: #c0392b;
-    border-color: #c0392b;
+    background-color: var(--secondary);
+    border-color: var(--secondary);
   }
   
   .btn-danger:hover {
@@ -274,7 +285,7 @@
     color: white;
     padding: 12px 20px;
     border-radius: 8px;
-    border: 1px solid #219653;
+    border: 1px solid #b94d42;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -328,3 +339,4 @@
       justify-content: center;
     }
   }
+  

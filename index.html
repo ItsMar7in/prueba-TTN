@@ -1,73 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prueba TTN</title>
-  <!-- fonts de google-->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <title>Nick'Store</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;600&display=swap" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Estilos personalizados -->
+  <!-- Estilos Personalizados -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="bg-dark text-white d-flex justify-content-between align-items-center px-4 py-3 fixed-top">
     <h1 class="m-0">Nick'Store</h1>
-    <button id="toggle-cart" class="btn position-relative btn-outline-light">
+    <button id="toggle-cart" class="btn position-relative btn-outline-light" aria-label="Abrir carrito">
       <i class="bi bi-cart3 fs-4"></i>
-      <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+      <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" aria-hidden="true">
         0
       </span>
     </button>
   </header>
 
-  <main class="container my-4">
+  <main class="container my-5">
     <div id="product-list" class="row">
-      <!-- Productos desde la API aparecerán aquí -->
+      <div id="loading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+      <div id="error-message" class="text-danger text-center d-none">
+        <p>No se pudieron cargar los productos.</p>
+        <button class="btn btn-primary" onclick="loadProducts()">Reintentar</button>
+      </div>
     </div>
   </main>
 
-  <!-- Panel lateral del carrito -->
+  <!-- Panel Lateral del Carrito -->
   <div id="cart-panel" class="cart-panel">
     <div class="cart-header d-flex justify-content-between align-items-center">
       <h2 class="mb-0">Carrito</h2>
-      <button class="btn-close" onclick="toggleCart()"></button>
+      <button class="btn-close" onclick="toggleCart()" aria-label="Cerrar carrito"></button>
     </div>
     <div id="cart-items" class="mb-3"></div>
-    <p id="subtotal">Subtotal: $0</p>
-    <div class="d-flex gap-2 mt-2">
-      <button id="checkout-button" class="btn btn-success">Proceder al pago</button>
-      <button id="clear-cart-button" class="btn btn-danger">Vaciar Carrito</button>
+    <div class="cart-footer">
+      <p id="subtotal" class="fw-bold">Subtotal: $0</p>
+      <div class="d-flex gap-2 mt-2">
+        <button id="checkout-button" class="btn btn-success w-50">Proceder al pago</button>
+        <button id="clear-cart-button" class="btn btn-danger w-50">Vaciar Carrito</button>
+      </div>
     </div>
   </div>
-<!-- Modal de confirmación -->
-<div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+  <div id="cart-backdrop" class="cart-backdrop"></div>
+
+  <!-- Modal para mostrar imagen y descripción -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addToCartModalLabel">Producto agregado</h5>
+          <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          El producto ha sido añadido a tu carrito exitosamente.
+          <div class="text-center mb-3">
+            <img id="modalProductImage" src="" alt="Producto" class="img-fluid rounded" style="max-height: 400px; object-fit: contain;">
+          </div>
+          <p id="modalProductDescription" class="text-muted"></p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Seguir comprando</button>
-          <button type="button" class="btn btn-primary" onclick="toggleCart()" data-bs-dismiss="modal">Ver carrito</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
   </div>
-  
-  <footer class="bg-dark text-white text-center py-3 mt-auto">
-    <p>INFORMACIÓN DE CONTACTO</p>
+
+  <footer class="bg-dark text-white py-4 mt-auto">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-envelope me-2"></i><a href="mailto:contacto@nickstore.com" class="text-white text-decoration-none">contacto@nickstore.com</a></li>
+            <li><i class="bi bi-telephone me-2"></i><a href="tel:+1234567890" class="text-white text-decoration-none">+1 (234) 567-890</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Enlaces Rápidos</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white text-decoration-none">Inicio</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Productos</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <ul class="list-unstyled d-flex gap-3 justify-content-center mt-2">
+            <li><a href="https://www.facebook.com/martinr.pereztorres" class="text-white" aria-label="Facebook"><i class="bi bi-facebook fs-5"></i></a></li>
+            <li><a href="https://www.instagram.com/itsmar7in/" class="text-white" aria-label="Twitter"><i class="bi bi-twitter fs-5"></i></a></li>
+            <li><a href="#" class="text-white" aria-label="Instagram"><i class="bi bi-instagram fs-5"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="bg-light my-4">
+      <p class="text-center mb-0">© 2025 Nick'Store. Todos los derechos reservados.</p>
+    </div>
   </footer>
 
-  <!-- Bootstrap JS + Script -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'936ff999fbb5678c',t:'MTc0NTc3NDI2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prueba TTN</title>
+  <!-- fonts de google-->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Estilos personalizados -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bg-dark text-white d-flex justify-content-between align-items-center px-4 py-3 fixed-top">
+    <h1 class="m-0">Nick'Store</h1>
+    <button id="toggle-cart" class="btn position-relative btn-outline-light">
+      <i class="bi bi-cart3 fs-4"></i>
+      <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+        0
+      </span>
+    </button>
+  </header>
+
+  <main class="container my-4">
+    <div id="product-list" class="row">
+      <!-- Productos desde la API aparecerán aquí -->
+    </div>
+  </main>
+
+  <!-- Panel lateral del carrito -->
+  <div id="cart-panel" class="cart-panel">
+    <div class="cart-header d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Carrito</h2>
+      <button class="btn-close" onclick="toggleCart()"></button>
+    </div>
+    <div id="cart-items" class="mb-3"></div>
+    <p id="subtotal">Subtotal: $0</p>
+    <div class="d-flex gap-2 mt-2">
+      <button id="checkout-button" class="btn btn-success">Proceder al pago</button>
+      <button id="clear-cart-button" class="btn btn-danger">Vaciar Carrito</button>
+    </div>
+  </div>
+<!-- Modal de confirmación -->
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addToCartModalLabel">Producto agregado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          El producto ha sido añadido a tu carrito exitosamente.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Seguir comprando</button>
+          <button type="button" class="btn btn-primary" onclick="toggleCart()" data-bs-dismiss="modal">Ver carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="bg-dark text-white text-center py-3 mt-auto">
+    <p>INFORMACIÓN DE CONTACTO</p>
+  </footer>
+
+  <!-- Bootstrap JS + Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

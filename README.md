@@ -47,8 +47,8 @@ Desarrollo de una tienda virtual simple como parte de la prueba técnica de fron
 
 - HTML5
 - CSS3
-- JavaScript (Vanilla)
-- Bootstrap 5 (sólo para maquetación básica)
+- JavaScript (Vanila)
+- Bootstrap 5 
 
 
 ##  Explicación general del funcionamiento

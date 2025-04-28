@@ -39,10 +39,20 @@
     padding: 15px;
     text-align: center;
   }
+  .wave {
+    position: absolute;
+    bottom: -80px;
+    left: 0;
+    width: 100%;
+   
+    overflow: hidden;
+    line-height: 0;
+  }
   
   /* Animación del header al hacer scroll */
   header {
     transition: transform 0.3s ease-in-out;
+  
   }
   
   header.header-hidden {

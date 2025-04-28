@@ -137,6 +137,7 @@ function addToCart(product) {
 - El código está comentado para facilitar su comprensión.
 - Se podría mejorar usando almacenamiento local (`localStorage`) para persistir el carrito.
 - El diseño es responsivo y compatible con dispositivos móviles.
+- puede abrirse una pagina de despliegue del repositorio en este link: https://itsmar7in.github.io/prueba-TTN/
 
 ---
 

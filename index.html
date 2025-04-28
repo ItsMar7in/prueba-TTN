@@ -5,119 +5,181 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nick'Store</title>
   <link rel="icon" href="img/1.ico" type="image/x-icon">
- 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
-
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <!-- Estilos Personalizados -->
   <link rel="stylesheet" href="styles.css">
+  <!-- Enlaza los estilos desde styles.css -->
 </head>
 <body>
-    <header class="text-white d-flex justify-content-between align-items-center px-4 py-3 fixed-top">
-        <div class="d-flex align-items-center gap-2" >
-            <img src="img/2-removebg-preview (2).png" alt="logo" class="logo-header">
-            <h1 class="m-0">Nick'Store</h1>
-        </div>
+  <!-- Contenedor principal del contenido de la página -->
+  <header class="text-white d-flex justify-content-between align-items-center px-4 py-3 fixed-top">
+    <!-- Encabezado fijo -->
+    <div class="d-flex align-items-center gap-2">
+      <!-- Contenedor para el logo y el título -->
+      <img src="img/2-removebg-preview (2).png" alt="logo" class="logo-header">
+      <!-- Imagen del logo -->
+      <h1 class="m-0">Nick'Store</h1>
+      <!-- Título principal de la tienda -->
+    </div>
    
-    <button id="toggle-cart" class="btn position-relative btn-outline-light" aria-label="Abrir carrito">
+    <button id="toggle-carrito" class="btn position-relative btn-outline-light" aria-label="Abrir carrito">
+      <!-- Botón para abrir/cerrar el carrito -->
       <i class="bi bi-cart3 fs-4"></i>
-      <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" aria-hidden="true">
-        0
+      <!-- Ícono del carrito -->
+      <span id="carrito-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" aria-hidden="true">
+        <!-- Contador de ítems en el carrito, inicialmente oculto -->
       </span>
     </button>
   </header>
 
   <main class="container my-5">
+    <!-- Contenido principal de la página -->
     <div id="product-list" class="row">
+      <!-- Contenedor para la lista de productos -->
       <div id="loading" class="text-center">
+        <!-- Indicador de carga mientras se obtienen los productos -->
         <div class="spinner-border text-primary" role="status">
+          <!-- Animación de carga -->
           <span class="visually-hidden">Cargando...</span>
+          <!-- Texto oculto para accesibilidad -->
         </div>
       </div>
       <div id="error-message" class="text-danger text-center d-none">
+        <!-- Mensaje de error si falla la carga de productos -->
         <p>No se pudieron cargar los productos.</p>
+        <!-- Texto del mensaje de error -->
         <button class="btn btn-primary" onclick="loadProducts()">Reintentar</button>
+        <!-- Botón para reintentar la carga -->
       </div>
     </div>
   </main>
 
   <!-- Panel Lateral del Carrito -->
-  <div id="cart-panel" class="cart-panel">
-    <div class="cart-header d-flex justify-content-between align-items-center">
+  <div id="carrito-panel" class="carrito-panel">
+    <!-- Panel lateral que muestra el carrito -->
+    <div class="carrito-header d-flex justify-content-between align-items-center">
+      <!-- Encabezado del carrito -->
       <h2 class="mb-0">Carrito</h2>
-      <button class="btn-close" onclick="toggleCart()" aria-label="Cerrar carrito"></button>
+      <!-- Título del carrito -->
+      <button class="btn-close" onclick="toggleCarrito()" aria-label="Cerrar carrito"></button>
+      <!-- Botón para cerrar el carrito -->
     </div>
-    <div id="cart-items" class="mb-3"></div>
-    <div class="cart-footer">
+    <div id="carrito-items" class="mb-3"></div>
+    <!-- Contenedor para los ítems del carrito -->
+    <div class="carrito-footer">
+      <!-- Pie del carrito con subtotal y botones -->
       <p id="subtotal" class="fw-bold">Subtotal: $0</p>
+      <!-- Muestra el subtotal del carrito -->
       <div class="d-flex gap-2 mt-2">
+        <!-- Contenedor para los botones de acción -->
         <button id="checkout-button" class="btn btn-success w-50">Proceder al pago</button>
-        <button id="clear-cart-button" class="btn btn-danger w-50">Vaciar Carrito</button>
+        <!-- Botón para proceder al pago -->
+        <button id="clear-carrito-button" class="btn btn-danger w-50">Vaciar Carrito</button>
+        <!-- Botón para vaciar el carrito -->
       </div>
     </div>
   </div>
-  <div id="cart-backdrop" class="cart-backdrop"></div>
+  <div id="carrito-backdrop" class="carrito-backdrop"></div>
+  <!-- Fondo oscuro que aparece cuando el carrito está abierto -->
 
   <!-- Modal para mostrar imagen y descripción -->
   <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <!-- Modal para detalles del producto -->
     <div class="modal-dialog modal-lg">
+      <!-- Contenedor del modal, tamaño grande -->
       <div class="modal-content">
+        <!-- Contenido del modal -->
         <div class="modal-header">
+          <!-- Encabezado del modal -->
           <h5 class="modal-title" id="productModalLabel">Detalles del Producto</h5>
+          <!-- Título del modal -->
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <!-- Botón para cerrar el modal -->
         </div>
         <div class="modal-body">
+          <!-- Cuerpo del modal -->
           <div class="text-center mb-3">
+            <!-- Contenedor para la imagen del producto -->
             <img id="modalProductImage" src="" alt="Producto" class="img-fluid rounded" style="max-height: 400px; object-fit: contain;">
+            <!-- Imagen del producto -->
           </div>
           <p id="modalProductDescription" class="text-muted"></p>
+          <!-- Descripción del producto -->
         </div>
         <div class="modal-footer">
+          <!-- Pie del modal -->
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <!-- Botón para cerrar el modal -->
         </div>
       </div>
     </div>
   </div>
 
   <footer class="bg-dark text-white py-4 mt-auto">
+    <!-- Pie de página -->
     <div class="container">
+      <!-- Contenedor del contenido del footer -->
       <div class="row g-4">
+        <!-- Fila con columnas para el contenido -->
         <div class="col-md-4">
+          <!-- Columna para información de contacto -->
           <h5>Contacto</h5>
+          <!-- Título de la sección -->
           <ul class="list-unstyled">
-            <li><i class="bi bi-envelope me-2"></i><a href="mailto:contacto@nickstore.com" class="text-white text-decoration-none">contacto@nickstore.com</a></li>
-            <li><i class="bi bi-telephone me-2"></i><a href="tel:+1234567890" class="text-white text-decoration-none">+1 (234) 567-890</a></li>
+            <!-- Lista de contactos -->
+            <li><i class="bi bi-envelope me-2"></i><a  class="text-white text-decoration-none">tienda@Nickstore.com</a></li>
+            <li><i class="bi bi-telephone me-2"></i><a  class="text-white text-decoration-none">+1 (234) 567-890</a></li>
+            <!-- Enlace de teléfono -->
           </ul>
         </div>
         <div class="col-md-4">
+          <!-- Columna para enlaces rápidos -->
           <h5>Enlaces Rápidos</h5>
+          <!-- Título de la sección -->
           <ul class="list-unstyled">
+            <!-- Lista de enlaces -->
             <li><a href="#" class="text-white text-decoration-none">Inicio</a></li>
+            <!-- Enlace a la página de inicio -->
             <li><a href="#" class="text-white text-decoration-none">Productos</a></li>
+            <!-- Enlace a la página de productos -->
             <li><a href="#" class="text-white text-decoration-none">Contacto</a></li>
+            <!-- Enlace a la página de contacto -->
           </ul>
         </div>
         <div class="col-md-4">
+          <!-- Columna para redes sociales -->
           <h5>Síguenos</h5>
+          <!-- Título de la sección -->
           <ul class="list-unstyled d-flex gap-3 justify-content-center mt-2">
+            <!-- Lista de enlaces a redes sociales -->
             <li><a href="https://www.facebook.com/martinr.pereztorres" class="text-white" aria-label="Facebook"><i class="bi bi-facebook fs-5"></i></a></li>
-            <li><a href="https://www.instagram.com/itsmar7in/" class="text-white" aria-label="Twitter"><i class="bi bi-twitter fs-5"></i></a></li>
-            <li><a href="#" class="text-white" aria-label="Instagram"><i class="bi bi-instagram fs-5"></i></a></li>
+            <!-- Enlace a Facebook -->
+            <li><a href="#" class="text-white" aria-label="Twitter"><i class="bi bi-twitter fs-5"></i></a></li>
+            <!-- Enlace a Twitter -->
+            <li><a href="https://www.instagram.com/itsmar7in/" class="text-white" aria-label="Instagram"><i class="bi bi-instagram fs-5"></i></a></li>
+            <!-- Enlace a Instagram -->
           </ul>
         </div>
       </div>
       <hr class="bg-light my-4">
+      <!-- Separador horizontal -->
       <p class="text-center mb-0">© 2025 Nick'Store. Todos los derechos reservados.</p>
+      <!-- Texto de derechos de autor -->
     </div>
   </footer>
 
   <!-- Bootstrap JS -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <!-- Script para decodificar correos electrónicos -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Carga el JavaScript de Bootstrap -->
   <script src="script.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'936ff999fbb5678c',t:'MTc0NTc3NDI2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+  <!-- Carga el script personalizado -->
+  
+</body>
 </html>

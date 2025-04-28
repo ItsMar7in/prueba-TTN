@@ -1,35 +1,36 @@
+// Seleccionamos los elementos principales del DOM
 const productList = document.getElementById('product-list');
-const cartItems = document.getElementById('cart-items');
+const carritoItems = document.getElementById('carrito-items');
 const subtotalElement = document.getElementById('subtotal');
-const cartCount = document.getElementById('cart-count');
+const carritoCount = document.getElementById('carrito-count');
 const header = document.querySelector('header');
 
-let cart = [];
-let lastScrollTop = 0;
+// Variables de control
+let carrito = []; // Carrito de compras
+let lastScrollTop = 0; // Última posición de scroll
 
 /**
- * Actualiza la visualización del carrito, subtotal y conteo de ítems
+ * Actualiza la visualización del carrito, subtotal y conteo de ítems.
  */
-function updateCart() {
-  cartItems.innerHTML = '';
+function updateCarrito() {
+  carritoItems.innerHTML = '';
   let subtotal = 0;
 
-  cart.forEach(item => {
+  carrito.forEach(item => {
     subtotal += item.price * item.quantity;
 
+    // Crear contenedor del item en el carrito
     const div = document.createElement('div');
     div.className = 'd-flex justify-content-between align-items-start mb-4';
-
     div.innerHTML = `
       <div>
         <div class="d-flex align-items-center mb-2">
-          <img src="${item.image || 'fallback-image.jpg'}" class="cart-item-img me-2" alt="${item.title}">
+          <img src="${item.image || 'fallback-image.jpg'}" class="carrito-item-img me-2" alt="${item.title}">
           <div>
             <strong>${item.title}</strong><br>
             <small>$${item.price.toFixed(2)} c/u</small>
           </div>
         </div>
-        
       </div>
       <div class="d-flex flex-column align-items-center">
         <div class="d-flex align-items-center mb-2">
@@ -38,92 +39,97 @@ function updateCart() {
           <button class="btn btn-sm btn-outline-primary mx-2" onclick="increaseQuantity(${item.id})" aria-label="Aumentar cantidad de ${item.title}">+</button>
         </div>
         <div class="text-end">
-          <button class="btn btn-sm btn-danger mt-2" onclick="removeFromCart(${item.id})" aria-label="Quitar ${item.title} del carrito">Quitar</button>
+          <button class="btn btn-sm btn-danger mt-2" onclick="removeFromCarrito(${item.id})" aria-label="Quitar ${item.title} del carrito">Quitar</button>
         </div>
       </div>
     `;
-
-    cartItems.appendChild(div);
+    carritoItems.appendChild(div);
   });
 
+  // Actualizar subtotal y contador
   subtotalElement.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
+  const totalQuantity = carrito.reduce((sum, item) => sum + item.quantity, 0);
+  carritoCount.textContent = totalQuantity;
 
-  const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-  cartCount.textContent = totalQuantity;
-
-  cartCount.classList.toggle('d-none', totalQuantity === 0);
+  // Mostrar/ocultar contador
+  carritoCount.classList.toggle('d-none', totalQuantity === 0);
 }
 
 /**
- * Agrega un producto al carrito
+ * Agrega un producto al carrito.
+ * @param {Object} product - Producto a agregar.
  */
-function addToCart(product) {
+function addToCarrito(product) {
   if (!product || typeof product.price !== 'number' || product.price <= 0) return;
 
-  const existing = cart.find(item => item.id === product.id);
+  const existing = carrito.find(item => item.id === product.id);
   if (existing) {
     existing.quantity++;
   } else {
-    cart.push({ id: product.id, title: product.title, price: product.price, quantity: 1, image: product.image });
+    carrito.push({ id: product.id, title: product.title, price: product.price, quantity: 1, image: product.image });
   }
-  updateCart();
+  updateCarrito();
   showMessage('¡Producto añadido al carrito!');
 }
 
 /**
- * Aumenta la cantidad de un producto
+ * Aumenta la cantidad de un producto en el carrito.
+ * @param {number} productId - ID del producto.
  */
 function increaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
+  const item = carrito.find(p => p.id === productId);
   if (item) {
     item.quantity++;
-    updateCart();
+    updateCarrito();
   }
 }
 
 /**
- * Disminuye la cantidad o elimina el producto si es 1
+ * Disminuye la cantidad de un producto o lo elimina si llega a 1.
+ * @param {number} productId - ID del producto.
  */
 function decreaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
+  const item = carrito.find(p => p.id === productId);
   if (item && item.quantity > 1) {
     item.quantity--;
-    updateCart();
+    updateCarrito();
   } else {
-    removeFromCart(productId);
+    removeFromCarrito(productId);
   }
 }
 
 /**
- * Elimina un producto del carrito
+ * Elimina un producto del carrito.
+ * @param {number} productId - ID del producto.
  */
-function removeFromCart(productId) {
-  cart = cart.filter(p => p.id !== productId);
-  updateCart();
+function removeFromCarrito(productId) {
+  carrito = carrito.filter(p => p.id !== productId);
+  updateCarrito();
 }
 
 /**
- * Vacía todo el carrito
+ * Vacía todo el carrito previa confirmación.
  */
-function clearCart() {
+function clearCarrito() {
   if (confirm('¿Estás seguro que deseas vaciar el carrito?')) {
-    cart = [];
-    updateCart();
+    carrito = [];
+    updateCarrito();
   }
 }
 
 /**
- * Muestra u oculta el panel del carrito
+ * Muestra/oculta el panel lateral del carrito.
  */
-function toggleCart() {
-  const panel = document.getElementById('cart-panel');
-  const backdrop = document.getElementById('cart-backdrop');
+function toggleCarrito() {
+  const panel = document.getElementById('carrito-panel');
+  const backdrop = document.getElementById('carrito-backdrop');
   panel.classList.toggle('open');
   backdrop.classList.toggle('open');
 }
 
 /**
- * Muestra un mensaje tipo toast
+ * Muestra un mensaje tipo "toast" de manera temporal.
+ * @param {string} message - Mensaje a mostrar.
  */
 function showMessage(message) {
   const toast = document.createElement('div');
@@ -139,7 +145,8 @@ function showMessage(message) {
 }
 
 /**
- * Muestra el modal con la imagen y descripción del producto
+ * Muestra un modal con la imagen y descripción del producto.
+ * @param {Object} product - Producto a mostrar.
  */
 function showProductModal(product) {
   const modalImage = document.getElementById('modalProductImage');
@@ -156,11 +163,12 @@ function showProductModal(product) {
 }
 
 /**
- * Carga productos desde la API
+ * Carga los productos desde una API externa.
  */
 function loadProducts() {
   const loading = document.getElementById('loading');
   const errorMessage = document.getElementById('error-message');
+
   loading.classList.remove('d-none');
   errorMessage.classList.add('d-none');
   productList.innerHTML = '';
@@ -172,6 +180,7 @@ function loadProducts() {
       products.forEach(product => {
         const col = document.createElement('div');
         col.className = 'col-lg-3 col-md-4 col-sm-6 mb-4';
+
         col.innerHTML = `
           <div class="card h-100">
             <div class="card-img-container">
@@ -185,7 +194,8 @@ function loadProducts() {
             </div>
           </div>
         `;
-        col.querySelector('button').addEventListener('click', () => addToCart(product));
+
+        col.querySelector('button').addEventListener('click', () => addToCarrito(product));
         col.querySelector('.card-img-top').addEventListener('click', () => showProductModal(product));
         productList.appendChild(col);
       });
@@ -197,24 +207,25 @@ function loadProducts() {
     });
 }
 
-// Manejar el desplazamiento para ocultar/mostrar el header
+/**
+ * Maneja el scroll de la página para ocultar o mostrar el header.
+ */
 window.addEventListener('scroll', () => {
   const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
   if (currentScrollTop > lastScrollTop) {
-    // Desplazamiento hacia abajo
     header.classList.add('header-hidden');
   } else {
-    // Desplazamiento hacia arriba
     header.classList.remove('header-hidden');
   }
 
-  lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
+  lastScrollTop = Math.max(0, currentScrollTop);
 });
 
-document.getElementById('clear-cart-button').addEventListener('click', clearCart);
-document.getElementById('toggle-cart').addEventListener('click', toggleCart);
-document.getElementById('cart-backdrop').addEventListener('click', toggleCart);
+// Asociar eventos a botones principales
+document.getElementById('clear-carrito-button').addEventListener('click', clearCarrito);
+document.getElementById('toggle-carrito').addEventListener('click', toggleCarrito);
+document.getElementById('carrito-backdrop').addEventListener('click', toggleCarrito);
 
-// Cargar productos al cargar la página
+// Cargar los productos al iniciar
 loadProducts();
